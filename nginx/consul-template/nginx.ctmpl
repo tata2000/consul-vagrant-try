@@ -1,1 +1,1 @@
-{{ key "nginx.conf" }}
+{{ key "{{ key "us/version/current" }}" }}

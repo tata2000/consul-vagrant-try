@@ -13,7 +13,7 @@ ENV NGINX_CTMPL=/etc/consul-template/nginx.ctmpl
 
 
 # Update and install necessary packages
-RUN apt-get update && apt-get install -y curl unzip
+RUN apt-get update && apt-get install -y curl unzip iproute2
 
 # Install Consul
 RUN curl -fsSL https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip -o consul.zip \
