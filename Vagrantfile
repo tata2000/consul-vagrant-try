@@ -20,6 +20,7 @@ Vagrant.configure("2") do |config|
               'CONSUL_LOCAL_CONFIG' => '{"server":true,"bootstrap_expect":1,"client_addr":"0.0.0.0"}',
               'CONSUL_BIND_INTERFACE' => 'eth1'
             }
+            docker.volumes = ["./prometheus.yml:/etc/prometheus/prometheus.yml"]
         end
         consul.trigger.after :up do |trigger|
             trigger.info = "Add key"
@@ -33,7 +34,7 @@ Vagrant.configure("2") do |config|
           docker.image = "prom/prometheus:latest"
           docker.name = "prometheus"
           docker.ports = ['9090:9090']
-          docker.volumes = ["./prometheus.yml:/etc/prometheus/prometheus.yml"]
+          #docker.volumes = ["./prometheus.yml:/etc/prometheus/prometheus.yml"]
           docker.remains_running = true
         end
     end
@@ -58,10 +59,16 @@ Vagrant.configure("2") do |config|
             docker.ports = ["808%d:80" % idx]
             docker.name = "nginx-" + region_name
             docker.build_dir = "nginx"
+            docker.volumes = [
+                "#{File.expand_path("../nginx/consul.d", __FILE__)}:/etc/consul.d/",
+                "#{File.expand_path("../nginx/consul-template", __FILE__)}:/etc/consul-template/",
+                "#{File.expand_path("../nginx/entrypoint.sh", __FILE__)}:/entrypoint.sh"
+            ]
             docker.env = {
-              'CONSUL_LOCAL_CONFIG' => '{"server":false}',
+              'CONSUL_LOCAL_CONFIG' => '{"server":false,"client_addr":"0.0.0.0"}',
               'CONSUL_BIND_INTERFACE' => 'eth1'
             }
+            docker.remains_running = false
           end
         end
     end
