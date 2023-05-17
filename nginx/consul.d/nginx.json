@@ -1,0 +1,17 @@
+{
+  "service": {
+    "name": "nginx",
+    "tags": ["web"],
+    "address": "127.0.0.1",
+    "port": 80,
+    "enable_tag_override": false,
+    "checks": [
+      {
+        "http": "http://localhost:80/version",
+        "method": "GET",
+        "interval": "10s",
+        "timeout": "1s"
+      }
+    ]
+  }
+}

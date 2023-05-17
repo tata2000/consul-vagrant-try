@@ -9,7 +9,8 @@ ENV CONSUL_VERSION=1.15.2
 ENV CONSUL_TEMPLATE_VERSION=0.31.0
 
 
-ENV NGINX_CTMPL=/etc/consul/templates/nginx.ctmpl
+ENV NGINX_CTMPL=/etc/consul-template/nginx.ctmpl
+
 
 # Update and install necessary packages
 RUN apt-get update && apt-get install -y curl unzip
@@ -32,7 +33,7 @@ RUN apt-get remove --purge -y curl unzip \
     && apt-get clean
 
 #Copy consul configuration files
-COPY consul /etc/consul
+COPY consul-template /etc/consul
 
 # Add entrypoint script
 ADD entrypoint.sh /entrypoint.sh
