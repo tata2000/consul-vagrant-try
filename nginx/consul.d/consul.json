@@ -1,0 +1,5 @@
+{
+  "start_join": ["consul:8500"],
+  "retry_join": ["consul:8500"],
+  "retry_interval": "30s"
+}
