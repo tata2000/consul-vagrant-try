@@ -58,7 +58,6 @@ Vagrant.configure("2") do |config|
             docker.ports = ["808%d:80" % idx]
             docker.name = "nginx-" + region_name
             docker.build_dir = "nginx"
-            docker.links = ["consul", "prometheus"]
             docker.env = {
               'CONSUL_LOCAL_CONFIG' => '{"server":false}',
               'CONSUL_BIND_INTERFACE' => 'eth1'
