@@ -20,11 +20,27 @@ Vagrant.configure("2") do |config|
               'CONSUL_LOCAL_CONFIG' => '{"server":true,"bootstrap_expect":1,"client_addr":"0.0.0.0"}',
               'CONSUL_BIND_INTERFACE' => 'eth1'
             }
-            docker.volumes = ["./prometheus.yml:/etc/prometheus/prometheus.yml"]
+            docker.volumes = []
         end
         consul.trigger.after :up do |trigger|
             trigger.info = "Add key"
             trigger.run = {inline: "curl -X PUT -T nginx/nginx.conf http://localhost:"+consul_local_port+"/v1/kv/" + kv_path }
+        end
+    end
+
+    config.vm.define "nomad" do |nomad|
+        nomad.vm.provider "docker" do |docker|
+            docker.build_dir = "nomad"
+            docker.has_ssh = false
+            docker.remains_running = true
+            docker.env = {
+              'NOMAD_LOCAL_CONFIG' => '{"server":true,"bootstrap_expect":1,"client_addr":"0.0.0.0"}',
+              'NOMAD_BIND_INTERFACE' => 'eth0'
+            }
+        end
+        nomad.vm.network "forwarded_port", guest: 4646, host: 4646
+        nomad.trigger.after :up do |trigger|
+            trigger.info = "Nomad Server is up and running!"
         end
     end
 
