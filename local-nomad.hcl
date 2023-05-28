@@ -1,9 +1,9 @@
 datacenter = "dc1"
-data_dir = "/nomad/data"
+data_dir = "/Users/tata/tmp/terasky/final/local/nomad/data"
 client {
   enabled = true
-  servers = ["nomad:4647"]
-  alloc_dir =  "/nomad/data"
+  servers = ["localhost:4647"]
+  alloc_dir =  "/Users/tata/tmp/terasky/final/local/nomad/alloc"
 }
 #
 #advertise {

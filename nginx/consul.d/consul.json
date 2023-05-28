@@ -1,7 +1,0 @@
-{
-  "retry_join": ["consul:8301"],
-  "retry_interval": "30s",
-  "bind_addr":"0.0.0.0",
-  "data_dir":"/tmp/consul",
-  "datacenter":"dc1"
-}

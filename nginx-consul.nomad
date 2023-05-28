@@ -1,30 +1,13 @@
 job "nginx" {
-#  multiregion {
-#
-#    strategy {
-#      max_parallel = 1
-#      on_failure   = "fail_all"
-#    }
-#
-#    region "us" {
-#      count       = 1
-#      datacenters = ["dc1"]
-#    }
-#
-##    region "eu" {
-##      count       = 1
-##      datacenters = ["dc1"]
-##    }
-#  }
-  datacenters = ["dc1"]
+  datacenters = ["us","eu"]
   type = "service"
 
   group "nginx" {
-    count = 1
+    count = 35
 
     update {
       canary       = 0
-      max_parallel = 1
+      max_parallel = 30
     }
     network {
       mode = "host"
@@ -36,7 +19,6 @@ job "nginx" {
 
     task "nginx-1" {
       driver = "docker"
-      datacenter = "dc1"
       config {
         image   = "nginx"
         ports   = ["http"]
@@ -45,8 +27,12 @@ job "nginx" {
         ]
       }
       template {
-        data = "{{ key \"nginx.conf\" }}"
+        data = <<EOH
+{{ $dc := env "NOMAD_DC" -}}
+{{ printf "%s/nginx.conf" $dc | key}}
+EOH
         destination = "nginx.conf"
+#        change_mode = "noop"
         change_mode   = "signal"
         change_signal = "SIGHUP"
       }
@@ -58,13 +44,6 @@ job "nginx" {
         name = "nginx"
         tags = ["nginx"]
         port = "http"
-
-#        check {
-#          type     = "http"
-#          path     = "/"
-#          interval = "1s"
-#          timeout  = "2s"
-#        }
       }
     }
   }
