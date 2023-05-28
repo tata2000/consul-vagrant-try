@@ -1,10 +1,10 @@
 datacenter = "us"
-data_dir = "/Users/tata/tmp/terasky/final/local/nomad/data"
+data_dir = "/tmp/nomad-us/data"
 
 client {
   enabled = true
   servers = ["localhost:4647"]
-  alloc_dir =  "/Users/tata/tmp/terasky/final/local/nomad/alloc"
+  alloc_dir =  "/tmp/nomad-us/alloc"
 }
 
 advertise {

@@ -1,13 +1,18 @@
 job "nginx" {
-  datacenters = ["us","eu"]
+  datacenters = ["us","er","apac","latam"]
   type = "service"
 
   group "nginx" {
-    count = 35
+    count = 20
+
+    spread {
+      attribute = "${node.datacenter}"
+      weight    = 100
+    }
 
     update {
       canary       = 0
-      max_parallel = 30
+      max_parallel = 20
     }
     network {
       mode = "host"
@@ -17,7 +22,7 @@ job "nginx" {
       }
     }
 
-    task "nginx-1" {
+    task "nginx" {
       driver = "docker"
       config {
         image   = "nginx"
@@ -32,13 +37,8 @@ job "nginx" {
 {{ printf "%s/nginx.conf" $dc | key}}
 EOH
         destination = "nginx.conf"
-#        change_mode = "noop"
         change_mode   = "signal"
         change_signal = "SIGHUP"
-      }
-      resources {
-        cpu    = 100 # 100 MHz
-        memory = 128 # 128 MB
       }
       service {
         name = "nginx"

@@ -8,13 +8,9 @@ http {
     server {
         listen  80;
         server_name  localhost;
-		location /version {
-		    return 200 '1';
-		}
 
         location / {
-            root   /usr/share/nginx/html;
-            index  1.html;
+		    return 200 'Current version is ${version_number}\n';
         }
     }
 }
